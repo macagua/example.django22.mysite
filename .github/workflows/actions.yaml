@@ -36,7 +36,7 @@ jobs:
           git diff-index --quiet HEAD || (git commit -a -m "feat: generate SMT and code mismatch report")
 
       - name: push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: actions
