@@ -23,7 +23,8 @@ def run_actions():
     print("####### Add a sample file.")
     data = {
         "morguard": "en_ca",
-        "hammerson": "fr_fr"
+        "hammerson": "fr_fr",
+        "oxford": "en_ca"  # update
     }
     with open("sample_config.json", "w") as f:
         json.dump(data, f)
