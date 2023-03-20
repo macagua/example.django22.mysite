@@ -14,10 +14,10 @@ def run_actions():
     print(f"Fetched MMS_URL value is {mms_url}")
 
     print("##### CHECK FOR INSTALLED REQUIREMENTS")
-    urlpatterns = [
-        path('admin/', admin.site.urls),
-    ]
-    print(f"urlpatterns created are - {urlpatterns}")
+    # urlpatterns = [
+    #     path('admin/', admin.site.urls),
+    # ]
+    # print(f"urlpatterns created are - {urlpatterns}")
     print(f"Flow object is - {Flow.__dict__}")
 
     print("####### Add a sample file.")
