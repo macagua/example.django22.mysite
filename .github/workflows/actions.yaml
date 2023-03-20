@@ -1,8 +1,7 @@
 name: Generate mismatch report
 
 on:
-  schedule:
-    - cron: '0 0 * * 1' # At 00:00 on Monday
+  workflow_dispatch: {}
 
 jobs:
   generate-mismatch-report:
