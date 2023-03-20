@@ -1,0 +1,43 @@
+name: Generate mismatch report
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # At 00:00 on Monday
+
+jobs:
+  generate-mismatch-report:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # install the python version needed
+
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: execute the script
+        env:
+          MMS_URL: http://mall-management-service-prod-api.mall.adeptmind.ai
+        run: python actions.py
+
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || (git commit -a -m "feat: generate SMT and code mismatch report")
+
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
