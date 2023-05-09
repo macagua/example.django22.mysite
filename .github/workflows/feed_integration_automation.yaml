@@ -1,0 +1,56 @@
+name: Feed integration automation
+
+on:
+  # Added the workflow_dispatch to enable running from UI.
+  workflow_dispatch: {}
+
+jobs:
+  generate-mismatch-report:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # checkout the repository content
+      - name: checkout repo content
+        uses: actions/checkout@v3
+
+      # install the python version needed
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # try extracting dependencies from cache
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
+
+      # install python packages
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # run the script
+      - name: execute the script
+        env:
+          MMS_URL: http://mall-management-service-prod-api.mall.adeptmind.ai
+        run: python actions.py
+
+      # commit the changes
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || (git commit -m "feat: config updates as per SMT changes")
+
+      # push the changes on remote with branch feed_integration_automate
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: feed_integration_automate
+          force: true
