@@ -1,4 +1,4 @@
 Django==4.2.18
 pkg-resources==0.0.0
 pytz==2019.2
-sqlparse==0.4.4
+sqlparse==0.5.0
